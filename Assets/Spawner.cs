@@ -5,6 +5,9 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     float spawnRate = 1f;
 
+    /// <summary>
+    /// The hexagon prefab that is spanwed for the player to dodge.
+    /// </summary>
     [SerializeField]
     GameObject hexagonPrefab;
 
