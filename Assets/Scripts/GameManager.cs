@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(IsGameInProgress == false)
+        if (IsGameInProgress == false)
         {
             if (Input.GetKey(KeyCode.R))
             {
@@ -61,8 +61,6 @@ public class GameManager : MonoBehaviour
         CurrentScore = 0;
 
         IsGameInProgress = false;
-
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void IncreaseCurrentScore(int amountToIncrease)
@@ -80,6 +78,10 @@ public class GameManager : MonoBehaviour
             mainCameraRotator.rotateSpeed *= -1f;
         }
         if (CurrentScore % 10 == 0)
+        {
+            Spawner.Instance.SetNewRandomSpawnRate();
+        }
+        if (CurrentScore % 15 == 0)
         {
             //Reverse control direction
             playerScript.inputDirection *= -1f;

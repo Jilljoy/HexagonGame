@@ -5,6 +5,11 @@
 /// </summary>
 public class ColliderObject : MonoBehaviour
 {
+    protected void Start()
+    {
+        Setup();
+    }
+
     /// <summary>
     /// Setup this current ColliderObject.
     /// Give it a random z-axis rotation and set it's localScale to 10.

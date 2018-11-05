@@ -171,8 +171,8 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
+  m_HDR: 0
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -444,9 +444,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54bf449a0cdd4d5409d0f2f90ebc44cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRate: 1
-  hexagonPrefab: {fileID: 1199509755294238, guid: 1e0b7cefff9167d4e94e5cbc9d868c11,
-    type: 2}
+  spawnRate: 0.5
+  objectsToSpawnFrom:
+  - {fileID: 1199509755294238, guid: 1e0b7cefff9167d4e94e5cbc9d868c11, type: 2}
+  - {fileID: 1552783947268658, guid: 785a7784104899a40a0d0c5b70c10ac3, type: 2}
   allColours:
   - {r: 0.9372549, g: 0.35686275, b: 0.35686275, a: 1}
   - {r: 0.1254902, g: 0.6392157, b: 0.61960787, a: 1}

@@ -18,7 +18,6 @@ public class PlayerScript : MonoBehaviour
     private void Update()
     {
         HorizontalInput = Input.GetAxis("Horizontal");
-        //HorizontalInput = Input.GetAxis("Mouse X");
     }
 
     private void FixedUpdate()

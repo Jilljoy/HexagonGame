@@ -1,15 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    public static Spawner Instance;
+
     [SerializeField]
     float spawnRate = 1f;
 
     /// <summary>
-    /// The hexagon prefab that is spanwed for the player to dodge.
+    /// A list of GameObject preafbs, assigned in the inspector that we randomly pick from to spawn in
     /// </summary>
     [SerializeField]
-    GameObject hexagonPrefab;
+    List<GameObject> objectsToSpawnFrom;
 
     LineRenderer lastSpawnedPrefab;
     [SerializeField]
@@ -17,6 +20,11 @@ public class Spawner : MonoBehaviour
     int colourIndex;
 
     float nextTimeToSpawn = 0f;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void Update()
     {
@@ -27,14 +35,33 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
+    /// Randomly set a spawn rate between 0.5f and 1.2f
+    /// </summary>
+    public void SetNewRandomSpawnRate()
+    {
+        spawnRate = Random.Range(0.5f, 1.2f);
+    }
+
+    /// <summary>
     /// Creates a hexagonPrefab, sets it's colour and updates the nextTimeToSpawn
     /// </summary>
     void CreateColliderObject()
     {
-        lastSpawnedPrefab = Instantiate(hexagonPrefab, Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+        lastSpawnedPrefab = Instantiate(objectsToSpawnFrom[GetRandomIndexFromAllObjectsToSpawnFrom()], Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
         lastSpawnedPrefab.material.color = ReturnNextColourFromIndex();
         nextTimeToSpawn = Time.time + (1f / spawnRate);
 
+    }
+
+    /// <summary>
+    /// Returns a random int between 0 and the number of items available to spawn
+    /// </summary>
+    /// <returns></returns>
+    int GetRandomIndexFromAllObjectsToSpawnFrom()
+    {
+        //Don't minus one off here as Random.Range(int,int) is exclusive of the second parameter.
+        int total = objectsToSpawnFrom.Count;
+        return Random.Range(0, total);
     }
 
     /// <summary>
