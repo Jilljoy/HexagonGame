@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -83,10 +84,37 @@ public class GameManager : MonoBehaviour
         }
         if (CurrentScore % 15 == 0)
         {
-            //Reverse control direction
-            playerScript.inputDirection *= -1f;
+            ReverseInputDirection();
         }
     }
+
+    public void PickupCollected(PickupType type)
+    {
+        switch (type)
+        {
+            case PickupType.IncreaseSpawnRate:
+                Spawner.Instance.IncreaseSpawnRate(0.2f);
+                break;
+            case PickupType.DecreaseSpawnRate:
+                Spawner.Instance.DecreaseSpawnRate(0.2f);
+                break;
+            case PickupType.ReverseInputDirection:
+                ReverseInputDirection();
+                break;
+            case PickupType.None:
+                //Do nothing so return
+                break;
+            default:
+                throw new NotImplementedException(string.Concat("The type: '", type, "', does not exist in the Enum PickupType"));
+        }
+    }
+
+    void ReverseInputDirection()
+    {
+        //Reverse control direction
+        playerScript.inputDirection *= -1f;
+    }
+
 
     void UpdateScoreTexts()
     {
@@ -95,4 +123,33 @@ public class GameManager : MonoBehaviour
     }
 
 
+    public static PickupType GetRandomPickupType()
+    {
+        int rand = UnityEngine.Random.Range(0, 100);
+        if (rand <= (int)PickupType.IncreaseSpawnRate)
+        {
+            return PickupType.IncreaseSpawnRate;
+        }
+        else if (rand <= (int)PickupType.DecreaseSpawnRate)
+        {
+            return PickupType.DecreaseSpawnRate;
+        }
+        else if (rand <= (int)PickupType.ReverseInputDirection)
+        {
+            return PickupType.ReverseInputDirection;
+        }
+        else
+        {
+            return PickupType.None;
+        }
+    }
+
+}
+
+public enum PickupType
+{
+    IncreaseSpawnRate = 10,
+    DecreaseSpawnRate = 20,
+    ReverseInputDirection = 30,
+    None = 100
 }

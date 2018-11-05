@@ -9,17 +9,48 @@ public class Spawner : MonoBehaviour
     float spawnRate = 1f;
 
     /// <summary>
-    /// A list of GameObject preafbs, assigned in the inspector that we randomly pick from to spawn in
+    /// A list of GameObject preafbs, assigned in the inspector, to randomly pick to spawn in
     /// </summary>
     [SerializeField]
-    List<GameObject> objectsToSpawnFrom;
+    List<GameObject> collidersToSpawn;
 
-    LineRenderer lastSpawnedPrefab;
+    /// <summary>
+    /// A GameObject prefab, assigned in the inspector, that is used for the player to pickup
+    /// </summary>
     [SerializeField]
-    Color[] allColours;
-    int colourIndex;
+    GameObject pickupToSpawn;
 
-    float nextTimeToSpawn = 0f;
+    /// <summary>
+    /// The last spawned collider
+    /// </summary>
+    LineRenderer lastSpawnedCollider;
+
+    /// <summary>
+    /// The last spawned pickup
+    /// </summary>
+    Pickup lastSpawnedPickup;
+
+    /// <summary>
+    /// A collection of all colours for the colliders to sequentially rotate through
+    /// </summary>
+    [SerializeField]
+    Color[] collidersColours;
+
+    /// <summary>
+    /// A collection of all colours for the pickups to randomly pick from
+    /// </summary>
+    [SerializeField]
+    List<Color> pickupsColours;
+
+    /// <summary>
+    /// The index of the current selected colour for the collider
+    /// </summary>
+    int currentColliderColourIndex;
+
+    /// <summary>
+    /// The time at which we next spawn a collider.
+    /// </summary>
+    float nextTimeToSpawnCollider = 0f;
 
     void Awake()
     {
@@ -28,7 +59,7 @@ public class Spawner : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.IsGameInProgress && Time.time >= nextTimeToSpawn)
+        if (GameManager.IsGameInProgress && Time.time >= nextTimeToSpawnCollider)
         {
             CreateColliderObject();
         }
@@ -43,24 +74,57 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
+    /// Adds the paramter, amount, to the spawnRate.
+    /// </summary>
+    /// <param name="amount"></param>
+    public void IncreaseSpawnRate(float amount)
+    {
+        spawnRate += amount;
+    }
+
+    /// <summary>
+    /// Subtracts the parameter from the spawnRate.
+    /// </summary>
+    /// <param name="amount"></param>
+    public void DecreaseSpawnRate(float amount)
+    {
+        spawnRate -= amount;
+    }
+
+    /// <summary>
     /// Creates a hexagonPrefab, sets it's colour and updates the nextTimeToSpawn
     /// </summary>
     void CreateColliderObject()
     {
-        lastSpawnedPrefab = Instantiate(objectsToSpawnFrom[GetRandomIndexFromAllObjectsToSpawnFrom()], Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
-        lastSpawnedPrefab.material.color = ReturnNextColourFromIndex();
-        nextTimeToSpawn = Time.time + (1f / spawnRate);
-
+        lastSpawnedCollider = Instantiate(collidersToSpawn[GetRandomIndexFromAllCollidersToSpawnFrom()], Vector3.zero, Quaternion.identity).GetComponent<LineRenderer>();
+        lastSpawnedCollider.material.color = ReturnNextColourFromIndex();
+        nextTimeToSpawnCollider = Time.time + (1f / spawnRate);
+        //if (Random.Range(0f, 1f) > 0f)
+        //{
+        //    CreatePickupObject();
+        //}
     }
 
     /// <summary>
-    /// Returns a random int between 0 and the number of items available to spawn
+    /// Creates a pickup object, sets it's type and updates the nextTimeToSpawn
+    /// </summary>
+    void CreatePickupObject()
+    {
+        PickupType pickupType = GameManager.GetRandomPickupType();
+        if (pickupType == PickupType.None) return;
+        lastSpawnedPickup = Instantiate(pickupToSpawn, Vector3.up, Quaternion.identity).GetComponent<Pickup>();
+        lastSpawnedPickup.transform.Rotate(Vector3.forward, 90f);
+        lastSpawnedPickup.Setup(pickupType);
+    }
+
+    /// <summary>
+    /// Returns a random int between 0 and the number of colliders available to spawn
     /// </summary>
     /// <returns></returns>
-    int GetRandomIndexFromAllObjectsToSpawnFrom()
+    int GetRandomIndexFromAllCollidersToSpawnFrom()
     {
         //Don't minus one off here as Random.Range(int,int) is exclusive of the second parameter.
-        int total = objectsToSpawnFrom.Count;
+        int total = collidersToSpawn.Count;
         return Random.Range(0, total);
     }
 
@@ -71,10 +135,10 @@ public class Spawner : MonoBehaviour
     /// <returns></returns>
     Color ReturnNextColourFromIndex()
     {
-        colourIndex++;
+        currentColliderColourIndex++;
 
-        if (colourIndex > allColours.Length - 1) colourIndex = 0;
+        if (currentColliderColourIndex > collidersColours.Length - 1) currentColliderColourIndex = 0;
 
-        return allColours[colourIndex];
+        return collidersColours[currentColliderColourIndex];
     }
 }

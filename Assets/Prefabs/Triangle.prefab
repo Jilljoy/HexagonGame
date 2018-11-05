@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 68469602268801400}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Collider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,8 +39,8 @@ GameObject:
   - component: {fileID: 50422290384287480}
   - component: {fileID: 114503300376839966}
   m_Layer: 0
-  m_Name: Triangle_UNUSED
-  m_TagString: Untagged
+  m_Name: Triangle
+  m_TagString: Collider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -27,7 +28,8 @@ public class PlayerScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameManager.Instance.GameOver();
 
+        if (collision.tag.Equals("Collider", StringComparison.OrdinalIgnoreCase))
+            GameManager.Instance.GameOver();
     }
 }
