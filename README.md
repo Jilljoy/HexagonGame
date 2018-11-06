@@ -6,4 +6,5 @@
 
 ## To-Do:
 1. Add basic menu screen
-2. Add more shapes (Cube, Triangle etc)
+2. Add pickups 
+3. Pool all spawnables
